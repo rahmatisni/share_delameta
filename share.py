@@ -81,9 +81,8 @@ def pairData(data, dest_table_name):
 
     mdb_conn.close()
 
-
 for indexA, colsA in enumerate(listSource):
-    print (colsA)
+    print(colsA, '=>', listDest[indexA])
     Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
 
 # for connectionList in listSource :

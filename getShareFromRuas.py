@@ -5,16 +5,15 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
+def substring_after(s, delim):
+    return s.partition(delim)[2]
+
+
 def getDblist() :
     conn = connect_to_database()
     cur = conn.cursor()
     # Execute the SQL query
-    cur.execute("""
-        SELECT table_name
-        FROM information_schema.tables
-        WHERE table_schema = 'dbsharejmto'
-            AND table_type = 'BASE TABLE';
-    """)
+    cur.execute("select * from (SELECT table_name FROM information_schema.tables WHERE table_schema = 'dbsharejmto' AND table_type = 'BASE TABLE') as nama_tabel where table_name like '%bagihasil%' order by table_name asc")
                 
     # Fetch all the results
     table_names = cur.fetchall()
@@ -28,14 +27,11 @@ def getDblist() :
     for table in table_names:
         if substring in table[0]:
             table_share_origin.append(table[0])
-            index = table[0].find('bagihasil')
-            if index != -1:
-                substring = table[0][index + len('bagihasil') + 1:]
-                table_share_destination.append(substring)
-        
+            x = substring_after(table[0], "bagihasil_")
+            table_share_destination.append(x)
+            
     # print(table_share_origin, table_share_destination)
     # Close the cursor and connection
     cur.close()
     conn.close()
-
     return (table_share_origin, table_share_destination)
