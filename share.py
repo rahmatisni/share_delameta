@@ -135,6 +135,14 @@ for indexA, colsA in enumerate(listSource):
             print("Connection closed.")
             if len(result) > 0:
                 pairData(json.dumps(result), dest_table_name)
+            
+            # print(json.dumps(result))
+
+            # with open(dest_table_name+".json", "w") as outfile:
+            #     outfile.write(json.dumps(result))
+            result.clear()
+
+
             # conn.close()
 
     else:
