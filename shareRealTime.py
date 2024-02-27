@@ -2,7 +2,7 @@ from datetime import datetime
 from conn_pg import connect_to_database
 from conn_mysql import connect_to_database_mdb
 from getShareFromRuasRealTime import getDblistRT
-from tqdm import tqdm
+# from tqdm import tqdm
 import env
 
 

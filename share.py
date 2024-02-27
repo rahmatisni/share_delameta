@@ -2,7 +2,7 @@ from datetime import datetime
 from conn_pg import connect_to_database
 from conn_mysql import connect_to_database_mdb
 from getShareFromRuas import getDblist
-from tqdm import tqdm
+# from tqdm import tqdm
 
 
 import json
@@ -81,53 +81,57 @@ for indexA, colsA in enumerate(listSource):
             cur = conn.cursor()
             origin_table_name = colsA
             dest_table_name = listDest[indexA]
-            
-            cur.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{origin_table_name}'")
-            columns = cur.fetchall()
-            column_names = [col[0] for col in columns]
+            try :
+                cur.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{origin_table_name}'")
+                columns = cur.fetchall()
+                column_names = [col[0] for col in columns]
 
-            cur.close()
-            cur = conn.cursor()
-            cur.execute(
-                f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {c}.{origin_table_name} order by Tanggal asc, Shift asc")
-            
-            rows = cur.fetchall()
+                cur.close()
+                cur = conn.cursor()
+                cur.execute(
+                    f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {c}.{origin_table_name} order by Tanggal asc, Shift asc")
+                
+                rows = cur.fetchall()
 
-            for row in rows:
-                data['Id'] = row[2]
-                data['Shift'] = row[1]
-                data['Tanggal'] = row[0]
-                data['IdGerbang'] = Gerbangs
-                data['Pendapatan'] = {}
-                for index, cols in enumerate(column_names):
-                    if(cols != 'id' and cols != 'tanggal' and cols != 'shift'):
-                        indexes = index+2
-                        second_part = cols.split("_")[1]
-                        inv = second_part.upper()
-                        data['Pendapatan'][inv] = {
-                            'Tunai': getNullable(row, indexes, 0),
-                            'RpeMandiri': getNullable(row, indexes, 1),
-                            'RpeBri': getNullable(row, indexes, 2),
-                            'RpeBni': getNullable(row, indexes, 3),
-                            'RpeBca': getNullable(row, indexes, 4),
-                            'RpeFlo': getNullable(row, indexes, 5),
-                            'RpeDKI': getNullable(row, indexes, 6)
-                        }
-                result.append(data.copy())
-        # except Exception as e:
-        #     print("Error karna ini:", e)
-        # finally:
-            print("Connection closed.")
-            if len(result) > 0:
-                pairData(json.dumps(result), dest_table_name)
-            
-            # print(json.dumps(result))
+                for row in rows:
+                    data['Id'] = row[2]
+                    data['Shift'] = row[1]
+                    data['Tanggal'] = row[0]
+                    data['IdGerbang'] = Gerbangs
+                    data['Pendapatan'] = {}
+                    for index, cols in enumerate(column_names):
+                        if(cols != 'id' and cols != 'tanggal' and cols != 'shift'):
+                            indexes = index+2
+                            second_part = cols.split("_")[1]
+                            inv = second_part.upper()
+                            data['Pendapatan'][inv] = {
+                                'Tunai': getNullable(row, indexes, 0),
+                                'RpeMandiri': getNullable(row, indexes, 1),
+                                'RpeBri': getNullable(row, indexes, 2),
+                                'RpeBni': getNullable(row, indexes, 3),
+                                'RpeBca': getNullable(row, indexes, 4),
+                                'RpeFlo': getNullable(row, indexes, 5),
+                                'RpeDKI': getNullable(row, indexes, 6)
+                            }
+                    result.append(data.copy())
+            # except Exception as e:
+            #     print("Error karna ini:", e)
+            # finally:
+                print("Connection closed.")
+                if len(result) > 0:
+                    pairData(json.dumps(result), dest_table_name)
+                
+                # print(json.dumps(result))
 
-            # with open(dest_table_name+".json", "w") as outfile:
-            #     outfile.write(json.dumps(result))
-            result.clear()
-            conn.close()
+                # with open(dest_table_name+".json", "w") as outfile:
+                #     outfile.write(json.dumps(result))
+                result.clear()
+            except :
+                print('Source Tidak Ditemukan')
+                pass
 
+            finally:
+                conn.close()
     else:
         print("Connection not established. Exiting.")
 

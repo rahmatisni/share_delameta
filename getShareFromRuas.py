@@ -1,8 +1,8 @@
 from conn_pg import connect_to_database
-
 import json
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 
 def substring_after(s, delim):
