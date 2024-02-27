@@ -10,17 +10,12 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-# Call the function to establish the connection
 conn = connect_to_database()
-# mdb_conn = connect_to_database_mdb()
 c = os.getenv("schema_origin")
 
 listDB = getDblist()
 listSource = listDB[0]
 listDest = listDB[1]
-
-# 0 source
-# 1 dest
 
 data = {}
 result = []
@@ -36,18 +31,15 @@ def getNullable(row, index1, index2):
         return 0
 
 def insertData(data, indexA):
-    # print(indexA)
     mdb_conn = connect_to_database_mdb(indexA)
 
     if mdb_conn.is_connected():
         try:
             cursor = mdb_conn.cursor()
-            # print(data)
             sql = "INSERT INTO "+os.getenv("table_destination")+"(IdGerbang, Tanggal, Shift, Golongan, KodeInvestor, NamaInvestor, Tunai, RpeMandiri, RpeBri, RpeBni, RpeBca, RpeNobu, RpeDKI, RpeMega, RpDinasKary, RpDinasMitra, RpTotal, KodeIntegrator, json, flag, TanggalKirim, ResponseMessage, ResponseStatus, RpFlo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             sql += " ON DUPLICATE KEY UPDATE Tunai = %s, RpeMandiri = %s, RpeBri = %s, RpeBni = %s, RpeBca = %s, RpeNobu = %s, RpeDKI = %s, RpeMega = %s, RpDinasKary = %s, RpDinasMitra = %s, RpTotal = %s, KodeIntegrator = %s, json = %s, flag = %s, TanggalKirim = %s, ResponseMessage = %s, ResponseStatus = %s, RpFlo = %s"
             cursor.execute(sql, data)
             mdb_conn.commit()
-            # print("Data inserted successfully")
         except Exception as e:
             print(f"Error inserting data: {e}")
         finally:
@@ -85,15 +77,8 @@ for indexA, colsA in enumerate(listSource):
     print(colsA, '=>', listDest[indexA])
     Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
 
-# for connectionList in listSource :
-#     print(connectionList)
-
     if conn is not None:
-        # try:
-            # Perform database operations here
-            # For example:
             cur = conn.cursor()
-            # corrected SQL query
             origin_table_name = colsA
             dest_table_name = listDest[indexA]
             
@@ -141,9 +126,7 @@ for indexA, colsA in enumerate(listSource):
             # with open(dest_table_name+".json", "w") as outfile:
             #     outfile.write(json.dumps(result))
             result.clear()
-
-
-            # conn.close()
+            conn.close()
 
     else:
         print("Connection not established. Exiting.")
