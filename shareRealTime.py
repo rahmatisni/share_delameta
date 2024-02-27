@@ -84,68 +84,69 @@ def pairData(data, dest_table_name):
 
     mdb_conn.close()
 
-for indexA, colsA in enumerate(listSource):
-    print(colsA, '=>', listDest[indexA])
-    Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
-    Cabang = idCabang[indexA]
+def executeShare() :
+    for indexA, colsA in enumerate(listSource):
+        print(colsA, '=>', listDest[indexA])
+        Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
+        Cabang = idCabang[indexA]
 
-# for connectionList in listSource :
-    conn = connect_to_database()
-    if conn is not None:
-            # Perform database operations here
-            # For example:
-            origin_table_name = 'vtblshift_bagihasil_exit'
-            dest_table_name = listDest[indexA]
-            try :
-                cur = conn.cursor()
-                cur.execute(
-                    f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
-                columns = cur.fetchall()
-                column_names = [col[0] for col in columns]
-                cur.close()
-                cur = conn.cursor()
-                cur.execute(
-                    f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name} limit 1")
-                
-                rows = cur.fetchall()
-                cur.close()
+    # for connectionList in listSource :
+        conn = connect_to_database()
+        if conn is not None:
+                # Perform database operations here
+                # For example:
+                origin_table_name = 'vtblshift_bagihasil_exit'
+                dest_table_name = listDest[indexA]
+                try :
+                    cur = conn.cursor()
+                    cur.execute(
+                        f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
+                    columns = cur.fetchall()
+                    column_names = [col[0] for col in columns]
+                    cur.close()
+                    cur = conn.cursor()
+                    cur.execute(
+                        f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name} limit 1")
+                    
+                    rows = cur.fetchall()
+                    cur.close()
 
-                for row in rows:
-                    data['IdCabang'] = Cabang
-                    data['Id'] = row[2]
-                    data['Shift'] = row[1]
-                    data['Tanggal'] = row[0]
-                    data['IdGerbang'] = Gerbangs
-                    data['Pendapatan'] = {}
-                    for index, cols in enumerate(column_names):
-                        if(cols != 'id' and cols != 'tanggal' and cols != 'shift'):
-                            indexes = index+2
-                            second_part = cols.split("_")[1]
-                            inv = second_part.upper()
-                            data['Pendapatan'][inv] = {
-                                'Tunai': getNullable(row, indexes, 0),
-                                'RpeMandiri': getNullable(row, indexes, 1),
-                                'RpeBri': getNullable(row, indexes, 2),
-                                'RpeBni': getNullable(row, indexes, 3),
-                                'RpeBca': getNullable(row, indexes, 4),
-                                'RpeFlo': getNullable(row, indexes, 5),
-                                'RpeDKI': getNullable(row, indexes, 6)
-                            }
-                    result.append(data.copy())
-                if len(result) > 0:
-                    pairData(json.dumps(result), dest_table_name)
-                
-                # print(json.dumps(result))
+                    for row in rows:
+                        data['IdCabang'] = Cabang
+                        data['Id'] = row[2]
+                        data['Shift'] = row[1]
+                        data['Tanggal'] = row[0]
+                        data['IdGerbang'] = Gerbangs
+                        data['Pendapatan'] = {}
+                        for index, cols in enumerate(column_names):
+                            if(cols != 'id' and cols != 'tanggal' and cols != 'shift'):
+                                indexes = index+2
+                                second_part = cols.split("_")[1]
+                                inv = second_part.upper()
+                                data['Pendapatan'][inv] = {
+                                    'Tunai': getNullable(row, indexes, 0),
+                                    'RpeMandiri': getNullable(row, indexes, 1),
+                                    'RpeBri': getNullable(row, indexes, 2),
+                                    'RpeBni': getNullable(row, indexes, 3),
+                                    'RpeBca': getNullable(row, indexes, 4),
+                                    'RpeFlo': getNullable(row, indexes, 5),
+                                    'RpeDKI': getNullable(row, indexes, 6)
+                                }
+                        result.append(data.copy())
+                    if len(result) > 0:
+                        pairData(json.dumps(result), dest_table_name)
+                    
+                    # print(json.dumps(result))
 
-                # with open(dest_table_name+".json", "w") as outfile:
-                #     outfile.write(json.dumps(result))
-                result.clear()
-            except :
-                print('Source Tidak Ditemukan')
-                pass
+                    # with open(dest_table_name+".json", "w") as outfile:
+                    #     outfile.write(json.dumps(result))
+                    result.clear()
+                except :
+                    print('Source Tidak Ditemukan')
+                    pass
 
-            finally:
-                conn.close()
-    else:
-        print("Connection not established. Exiting.")
+                finally:
+                    conn.close()
+        else:
+            print("Connection not established. Exiting.")
 

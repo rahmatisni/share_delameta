@@ -3,10 +3,12 @@ import schedule
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
 
-def job():
-    shareRealTime()
+# shareRealTime.executeShare()
 
-schedule.every().minute.do(job)
+def job():
+    shareRealTime.executeShare()
+
+schedule.every().hour.do(job)
 
 # Run the scheduler
 while True:
