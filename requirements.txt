@@ -3,6 +3,6 @@ mysql-connector-python
 pymysql==0.7.6
 apscheduler
 python-dotenv==0.10.1
-tqdm
+tqdm==4.66.2
 apscheduler
-scedhule
+schedule
