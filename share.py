@@ -9,8 +9,6 @@ import json
 from dotenv import load_dotenv
 import os
 load_dotenv()
-
-conn = connect_to_database()
 c = os.getenv("schema_origin")
 
 listDB = getDblist()
@@ -64,7 +62,7 @@ def pairData(data, dest_table_name):
     mdb_conn = connect_to_database_mdb(dest_table_name)
     if mdb_conn:
         for indexA, dataToinsert in enumerate(dataqueryRes):
-            print(indexA, '/', len(dataqueryRes), '=>', (indexA / len(dataqueryRes)) * 100, '%')
+            print(indexA+1, '/', len(dataqueryRes), '=>', ((indexA+1) / len(dataqueryRes)) * 100, '%')
         # for dataToinsert in dataqueryRes :
             try :
                 insertData(dataToinsert, dest_table_name)
@@ -76,6 +74,7 @@ def pairData(data, dest_table_name):
 for indexA, colsA in enumerate(listSource):
     print(colsA, '=>', listDest[indexA])
     Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
+    conn = connect_to_database()
 
     if conn is not None:
             cur = conn.cursor()
@@ -89,7 +88,7 @@ for indexA, colsA in enumerate(listSource):
                 cur.close()
                 cur = conn.cursor()
                 cur.execute(
-                    f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {c}.{origin_table_name} order by Tanggal asc, Shift asc")
+                    f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {c}.{origin_table_name} order by Tanggal asc, Shift asc limit 1")
                 
                 rows = cur.fetchall()
 
@@ -117,7 +116,8 @@ for indexA, colsA in enumerate(listSource):
             # except Exception as e:
             #     print("Error karna ini:", e)
             # finally:
-                print("Connection closed.")
+                # print("Connection closed.")
+                # print(result)
                 if len(result) > 0:
                     pairData(json.dumps(result), dest_table_name)
                 
@@ -130,8 +130,9 @@ for indexA, colsA in enumerate(listSource):
                 print('Source Tidak Ditemukan')
                 pass
 
-            finally:
-                conn.close()
+            # finally:
+            #     conn.close()
     else:
         print("Connection not established. Exiting.")
 
+    conn.close()

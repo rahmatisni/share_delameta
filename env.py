@@ -88,13 +88,13 @@ pwd_origin = 'jmt02023!#'
 table_origin = 'tblatt4_bagihasil_'
 schema_origin = 'dbsharejmto'
 
-host_destination = '179.10.120.252'
+host_destination = '179.10.114.252'
 user_destination = 'mediasi'
-pwd_destination = '@jpm'
+pwd_destination = '@tmj'
 table_destination = 'jid_rekap_pendapatan_2023'
 table_destination_realtime_share = 'jid_rekap_pendapatan_db'
 
-ruas = 'JPM'
+ruas = 'TMJ'
 gerbang_id = '22'
 
 
