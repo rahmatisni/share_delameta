@@ -88,7 +88,7 @@ for indexA, colsA in enumerate(listSource):
                 cur.close()
                 cur = conn.cursor()
                 cur.execute(
-                    f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {c}.{origin_table_name} order by Tanggal asc, Shift asc limit 1")
+                    f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {c}.{origin_table_name} order by Tanggal asc, Shift asc")
                 
                 rows = cur.fetchall()
 
