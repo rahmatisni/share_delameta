@@ -9,15 +9,15 @@ def connect_to_database_mdb(databaseName):
     # print(databaseName, '1')
     try:
         connection = mysql.connector.connect(
-            # host= os.getenv("host_destination"),
-            # user= os.getenv("user_destination"),
-            # password= os.getenv("pwd_destination"),
-            # database= databaseName
-
-            host= env.host_destination,
-            user= env.user_destination,
-            password= env.pwd_destination,
+            host= os.getenv("host_destination"),
+            user= os.getenv("user_destination"),
+            password= os.getenv("pwd_destination"),
             database= databaseName
+
+            # host= env.host_destination,
+            # user= env.user_destination,
+            # password= env.pwd_destination,
+            # database= databaseName
         )
         if connection.is_connected():
             i = 1

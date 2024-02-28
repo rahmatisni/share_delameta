@@ -13,8 +13,8 @@ load_dotenv()
 
 # Call the function to establish the connection
 # conn = connect_to_database()
-# c = os.getenv("schema_origin")
-c = env.schema_origin
+c = os.getenv("schema_origin")
+# c = env.schema_origin
 
 
 listDB = getDblistRT()
@@ -46,7 +46,8 @@ def insertData(data, indexA):
         try:
             cursor = mdb_conn.cursor()
             # print(data)
-            sql = "INSERT INTO "+env.table_destination_realtime_share+"(IdCabang,IdGerbang, Tanggal, Shift, Golongan, KodeInvestor, NamaInvestor, Tunai, RpeMandiri, RpeBri, RpeBni, RpeBca, RpeNobu, RpeDKI, RpeMega, RpDinasKary, RpDinasMitra, RpTotal, KodeIntegrator, json, flag, TanggalKirim, ResponseMessage, ResponseStatus, RpFlo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO "+os.getenv("table_destination_realtime_share")+"(IdCabang,IdGerbang, Tanggal, Shift, Golongan, KodeInvestor, NamaInvestor, Tunai, RpeMandiri, RpeBri, RpeBni, RpeBca, RpeNobu, RpeDKI, RpeMega, RpDinasKary, RpDinasMitra, RpTotal, KodeIntegrator, json, flag, TanggalKirim, ResponseMessage, ResponseStatus, RpFlo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            # sql = "INSERT INTO "+env.table_destination_realtime_share+"(IdCabang,IdGerbang, Tanggal, Shift, Golongan, KodeInvestor, NamaInvestor, Tunai, RpeMandiri, RpeBri, RpeBni, RpeBca, RpeNobu, RpeDKI, RpeMega, RpDinasKary, RpDinasMitra, RpTotal, KodeIntegrator, json, flag, TanggalKirim, ResponseMessage, ResponseStatus, RpFlo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             sql += " ON DUPLICATE KEY UPDATE Tunai = %s, RpeMandiri = %s, RpeBri = %s, RpeBni = %s, RpeBca = %s, RpeNobu = %s, RpeDKI = %s, RpeMega = %s, RpDinasKary = %s, RpDinasMitra = %s, RpTotal = %s, KodeIntegrator = %s, json = %s, flag = %s, TanggalKirim = %s, ResponseMessage = %s, ResponseStatus = %s, RpFlo = %s"
             cursor.execute(sql, data)
             mdb_conn.commit()
@@ -75,12 +76,15 @@ def pairData(data, dest_table_name):
     mdb_conn = connect_to_database_mdb(dest_table_name)
     if mdb_conn:
         for indexA, dataToinsert in enumerate(dataqueryRes):
-            print(datetime.now(),'|', indexA+1, '/', len(dataqueryRes), '=>', ((indexA+1 )/ len(dataqueryRes)) * 100, '%')
+            if indexA % 60 == 0:
+                print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ((indexA+1) / len(dataqueryRes)) * 100, '%')
+            elif indexA+1 == len(dataqueryRes) :
+                print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ('100%'))            
         # for dataToinsert in dataqueryRes :
-            try :
-                insertData(dataToinsert, dest_table_name)
-            except :
-                print('Error')
+                try :
+                    insertData(dataToinsert, dest_table_name)
+                except :
+                    print('Error')
 
     mdb_conn.close()
 
@@ -92,13 +96,15 @@ def executeShare() :
 
     # for connectionList in listSource :
         conn = connect_to_database()
+
         if conn is not None:
                 # Perform database operations here
                 # For example:
+                cur = conn.cursor()
                 origin_table_name = 'vtblshift_bagihasil_exit'
                 dest_table_name = listDest[indexA]
                 try :
-                    cur = conn.cursor()
+                    # cur = conn.cursor()
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
                     columns = cur.fetchall()
@@ -109,8 +115,7 @@ def executeShare() :
                         f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name} limit 1")
                     
                     rows = cur.fetchall()
-                    cur.close()
-
+                
                     for row in rows:
                         data['IdCabang'] = Cabang
                         data['Id'] = row[2]
@@ -136,17 +141,19 @@ def executeShare() :
                     if len(result) > 0:
                         pairData(json.dumps(result), dest_table_name)
                     
-                    # print(json.dumps(result))
+                    
 
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
+                # except Exception as e :
+                #     print(e)
                 except :
                     print('Source Tidak Ditemukan')
                     pass
 
-                finally:
-                    conn.close()
+                # finally:
+                #     conn.close()
         else:
             print("Connection not established. Exiting.")
-
+        conn.close()

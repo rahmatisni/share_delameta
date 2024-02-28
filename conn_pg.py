@@ -5,17 +5,17 @@ import env
 load_dotenv()
 
 def connect_to_database():
-    # dbname = os.getenv("ruas")
-    # user = os.getenv("user_origin")
-    # password = os.getenv("pwd_origin")
-    # host = os.getenv('host_origin')
-    # port = '5432'  # or your port number
-
-    dbname = env.ruas
-    user = env.user_origin
-    password = env.pwd_origin
-    host = env.host_origin
+    dbname = os.getenv("ruas")
+    user = os.getenv("user_origin")
+    password = os.getenv("pwd_origin")
+    host = os.getenv('host_origin')
     port = '5432'  # or your port number
+
+    # dbname = env.ruas
+    # user = env.user_origin
+    # password = env.pwd_origin
+    # host = env.host_origin
+    # port = '5432'  # or your port number
 
     try:
         conn = psycopg2.connect(
