@@ -1,7 +1,6 @@
 from conn_pg import connect_to_database
 import json
 
-# Call the function to establish the connection
 conn = connect_to_database()
 c = 'dbsharejmto'
 
@@ -16,26 +15,20 @@ def getNullable(row, index1, index2, index3):
     except Exception as e:
         # print("Index does not exist")
         return 'null'
-# getNullable if connection is established
 if conn is not None:
     try:
-        # Perform database operations here
-        # For example:
         cur = conn.cursor()
-        # corrected SQL query
         cur.execute(
             f"SELECT * FROM {c}.tblshift_dinas_trne_ungaran_2023")
         rows = cur.fetchall()
         print(rows)
 
         for row in rows:
-            # print(row)
             data['id'] = row[0]
             data['shift'] = row[0][0]
             data['tgl_lap'] = row[0][1:7]
             data['npp'] = row[0][7:13]
             data['lalin'] = {}
-            # Initialize nested dictionaries for 'tunai', 'flo', 'e-toll', and 'dinas' under 'lalin'
             data['lalin']['tunai'] = {}
             data['lalin']['flo'] = {}
             data['lalin']['e-toll'] = {}
@@ -63,8 +56,6 @@ if conn is not None:
             data['bank']['pendapatan']['BCA']= {}
             data['bank']['pendapatan']['DKI']= {}
 
-            # getNullable(row,1,0,1)           
-            # Extract values for 'tunai' and 'flo' keys
             for i in range(6):
                 data['lalin']['tunai']['golongan_'+str(i+1)] = getNullable(row,1,0,i)
                 data['lalin']['flo']['golongan_'+str(i+1)] = getNullable(row,1,0,i)

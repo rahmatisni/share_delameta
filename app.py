@@ -1,9 +1,17 @@
 import shareRealTime
+import schedule
+from apscheduler.schedulers.background import BackgroundScheduler
+import time
 
-def main():
-    # Your main functionality here
-    # print("Hello, world!")
-    shareRealTime()
+shareRealTime.executeShare()
 
-if __name__ == "__main__":
-    main()
+
+# def job():
+#     shareRealTime.executeShare()
+
+# schedule.every().hour.do(job)
+
+# # Run the scheduler
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
