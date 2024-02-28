@@ -112,7 +112,7 @@ def executeShare() :
                     cur.close()
                     cur = conn.cursor()
                     cur.execute(
-                        f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name} limit 1")
+                        f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name}")
                     
                     rows = cur.fetchall()
                 
