@@ -76,13 +76,14 @@ def pairData(data, dest_table_name):
     mdb_conn = connect_to_database_mdb(dest_table_name)
     if mdb_conn:
         for indexA, dataToinsert in enumerate(dataqueryRes):
-            if indexA % 60 == 0:
-                print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ((indexA+1) / len(dataqueryRes)) * 100, '%')
-            elif indexA+1 == len(dataqueryRes) :
-                print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ('100%'))            
+                    
         # for dataToinsert in dataqueryRes :
             try :
                 insertData(dataToinsert, dest_table_name)
+                if indexA % 60 == 0:
+                    print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ((indexA+1) / len(dataqueryRes)) * 100, '%')
+                elif indexA+1 == len(dataqueryRes) :
+                    print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ('100%'))   
             except :
                 print('Error')
 
