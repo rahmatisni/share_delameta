@@ -92,11 +92,7 @@ def pairData(data, dest_table_name):
 def executeShare() :
     for indexA, colsA in enumerate(listSource):
         print(colsA, '=>', listDest[indexA])
-        try :
-            Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
-        except Exception as e:
-            print(e)
-            pass
+        Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
         Cabang = idCabang[indexA]
 
     # for connectionList in listSource :
@@ -106,8 +102,9 @@ def executeShare() :
                 # Perform database operations here
                 # For example:
                 cur = conn.cursor()
-                origin_table_name = 'vtblshift_bagihasil_exit'
+                origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
+                print(dest_table_name)
                 try :
                     # cur = conn.cursor()
                     cur.execute(
