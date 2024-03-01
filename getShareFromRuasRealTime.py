@@ -27,7 +27,7 @@ def getDblistRT() :
         print(table)
         # if substring in table[0]:
         shareRTOrigin.append(table[2].lower().replace(" ", ""))
-        shareRTDest.append(table[5])
+        shareRTDest.append(table[4])
         shareIDCabang.append(table[1])
 
 

@@ -104,7 +104,6 @@ def executeShare() :
                 cur = conn.cursor()
                 origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
-                print('xxxx', listDest)
                 try :
                     # cur = conn.cursor()
                     cur.execute(
