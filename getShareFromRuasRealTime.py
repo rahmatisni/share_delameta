@@ -27,7 +27,12 @@ def getDblistRT() :
         print(table)
         # if substring in table[0]:
         shareRTOrigin.append(table[2].lower().replace(" ", ""))
-        shareRTDest.append(table[4])
+        if(os.getenv("origin_table_name") == 'vtblshift_bagihasil_open'):
+            shareRTDest.append(table[4])
+        elif(os.getenv("origin_table_name") == 'vtblshift_bagihasil_exit'):
+            shareRTDest.append(table[5])
+        else :
+            shareRTDest.append(table[5])
         shareIDCabang.append(table[1])
 
 
