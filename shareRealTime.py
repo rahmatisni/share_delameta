@@ -96,6 +96,7 @@ def executeShare() :
             Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
         except Exception as e:
             print(e)
+            pass
         Cabang = idCabang[indexA]
 
     # for connectionList in listSource :
