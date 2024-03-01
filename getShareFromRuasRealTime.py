@@ -16,7 +16,7 @@ def getDblistRT() :
     master = 'data_master'
     conn = connect_to_database_mdb(master)
     cur = conn.cursor()
-    cur.execute("select * from tbl_gerbang where gerbang_nama <> 'ALL' order by db asc")
+    cur.execute("select * from tbl_gerbang where gerbang_nama NOT IN ('ALL', 'GB01', 'GB10') order by db asc")
     table_names = cur.fetchall()
 
     shareRTOrigin = []
