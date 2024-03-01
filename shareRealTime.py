@@ -92,7 +92,10 @@ def pairData(data, dest_table_name):
 def executeShare() :
     for indexA, colsA in enumerate(listSource):
         print(colsA, '=>', listDest[indexA])
-        Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
+        try :
+            Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
+        except Exception as e:
+            print(e)
         Cabang = idCabang[indexA]
 
     # for connectionList in listSource :
