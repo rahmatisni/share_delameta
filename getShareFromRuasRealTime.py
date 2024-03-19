@@ -31,6 +31,7 @@ def getDblistRT() :
             shareRTOrigin.append(table[5])
             shareRTDest.append(table[4])
         elif(os.getenv("origin_table_name") == 'vtblshift_bagihasil_exit'):
+            shareRTOrigin.append(table[6])
             shareRTDest.append(table[5])
         else :
             shareRTDest.append(table[5])
