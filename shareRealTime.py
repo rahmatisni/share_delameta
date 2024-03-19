@@ -18,7 +18,7 @@ class TimeoutException(Exception):
 def timeout_handler(signum, frame):
     raise TimeoutException("Query execution timed out")
 
-timeout_seconds = 60  # Adjust as needed
+timeout_seconds = 10  # Adjust as needed
 signal.signal(signal.SIGALRM, timeout_handler)
 signal.alarm(timeout_seconds)
 
