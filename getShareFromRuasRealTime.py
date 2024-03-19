@@ -16,7 +16,7 @@ def getDblistRT() :
     master = 'data_master'
     conn = connect_to_database_mdb(master)
     cur = conn.cursor()
-    cur.execute("select gerbang_id, ruas_id, gerbang_nama, host, port, db_integrator, status, jenis_gerbang, latitude_asal, longitude_asal from tbl_gerbang where gerbang_nama NOT IN ('ALL', 'GB01', 'GB10') order by db asc")
+    cur.execute("select gerbang_id, ruas_id, gerbang_nama, db , db_integrator from tbl_gerbang where gerbang_nama NOT IN ('ALL', 'GB01', 'GB10') order by db asc")
     table_names = cur.fetchall()
 
     shareRTOrigin = []
@@ -29,16 +29,17 @@ def getDblistRT() :
         print(table)
         # if substring in table[0]:
         # shareRTOrigin.append(table[2].lower().replace(" ", ""))
-        if(os.getenv("origin_table_name") == 'vtblshift_bagihasil_open'):
-            shareRTOrigin.append(table[5])
-            shareRTDest.append(table[4])
-        elif(os.getenv("origin_table_name") == 'vtblshift_bagihasil_exit'):
-            shareRTOrigin.append(table[6])
-            shareRTDest.append(table[5])
-        else :
-            shareRTDest.append(table[5])
-        shareIDCabang.append(table[1])
+        # if(os.getenv("origin_table_name") == 'vtblshift_bagihasil_open'):
+        #     shareRTOrigin.append(table[5])
+        #     shareRTDest.append(table[4])
+        # elif(os.getenv("origin_table_name") == 'vtblshift_bagihasil_exit'):
+        #     shareRTOrigin.append(table[6])
+        #     shareRTDest.append(table[5])
+        # else :
         shareIDGerbang.append(table[0])
+        shareIDCabang.append(table[1])
+        shareRTDest.append(table[3])
+        shareRTOrigin.append(table[4])
 
 
     return (shareRTOrigin, shareRTDest, shareIDCabang, shareIDGerbang)
