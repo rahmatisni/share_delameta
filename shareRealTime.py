@@ -116,7 +116,7 @@ def executeShare() :
                     )
                     # Fetch the result
                     resultz = cur.fetchone()
-                    # print("Result:", resultz[0])  # Assuming there's only one column in the result
+                    print("Result:", resultz[0])  # Assuming there's only one column in the result
                     cur.close()
 
                     origin_table_name = resultz[0]
