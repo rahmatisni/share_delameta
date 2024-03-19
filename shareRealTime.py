@@ -101,7 +101,6 @@ def executeShare() :
 
     # for connectionList in listSource :
         conn = connect_to_database()
-        conn.set_session(timeout=60)
 
         if conn is not None:
                 print('konek')
@@ -112,7 +111,7 @@ def executeShare() :
                 dest_table_name = listDest[indexA]
                 try :     
                     print('colsA',colsA)
-                    cur = conn.cursor()
+                    cur = conn.cursor(timeout=60)
                     # Execute the query
                     cur.execute(
                         f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
