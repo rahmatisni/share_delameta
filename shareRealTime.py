@@ -106,7 +106,7 @@ def executeShare() :
                 # Perform database operations here
                 # For example:
                 cur = conn.cursor()
-                origin_table_name = os.getenv("origin_table_name")
+                # origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
                 try :     
                     cur = conn.cursor()
