@@ -26,8 +26,9 @@ def getDblistRT() :
     for table in table_names:
         print(table)
         # if substring in table[0]:
-        shareRTOrigin.append(table[2].lower().replace(" ", ""))
+        # shareRTOrigin.append(table[2].lower().replace(" ", ""))
         if(os.getenv("origin_table_name") == 'vtblshift_bagihasil_open'):
+            shareRTOrigin.append(table[5])
             shareRTDest.append(table[4])
         elif(os.getenv("origin_table_name") == 'vtblshift_bagihasil_exit'):
             shareRTDest.append(table[5])
