@@ -106,18 +106,19 @@ def executeShare() :
                 origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
                 try :     
-                    # cur = conn.cursor()
-                    # # Execute the query
-                    # cur.execute(
-                    #     f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
-                    # )
-                    # # Fetch the result
-                    # resultz = cur.fetchone()
+                    cur = conn.cursor()
+                    # Execute the query
+                    cur.execute(
+                        f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
+                    )
+                    # Fetch the result
+                    resultz = cur.fetchone()
                     # print("Result:", resultz[0])  # Assuming there's only one column in the result
-                    # cur.close()
+                    cur.close()
 
-                    # origin_table_name = resultz[0]
-
+                    origin_table_name = resultz[0]
+                    print("Result:", origin_table_name)  # Assuming there's only one column in the result
+                    
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
                     columns = cur.fetchall()
