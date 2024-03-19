@@ -95,6 +95,7 @@ def executeShare() :
         print(colsA, '=>', listDest[indexA])
         # Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
         Gerbangs = IdGerbang[indexA]
+        print('Gerbangs', Gerbangs)
         Cabang = idCabang[indexA]
 
     # for connectionList in listSource :
