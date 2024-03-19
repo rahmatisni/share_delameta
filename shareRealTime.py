@@ -14,6 +14,10 @@ load_dotenv()
 
 class TimeoutException(Exception):
     pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("Query execution timed out")
+
 timeout_seconds = 60  # Adjust as needed
 signal.signal(signal.SIGALRM, timeout_handler)
 signal.alarm(timeout_seconds)
@@ -172,7 +176,7 @@ def executeShare() :
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
-                    
+
                 # except Exception as e :
                 #     print(e)
                     signal.alarm(0)
