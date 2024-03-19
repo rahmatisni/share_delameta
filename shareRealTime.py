@@ -111,7 +111,7 @@ def executeShare() :
                 dest_table_name = listDest[indexA]
                 try :     
                     print('colsA',colsA)
-                    cur = conn.cursor(timeout=60)
+                    cur = conn.cursor()
                     # Execute the query
                     cur.execute(
                         f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
@@ -164,11 +164,11 @@ def executeShare() :
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
-                except Exception as e :
-                    print(e)
-                # except :
-                #     print('Source Tidak Ditemukan')
-                #     pass
+                # except Exception as e :
+                #     print(e)
+                except :
+                    print('Source Tidak Ditemukan')
+                    pass
 
                 # finally:
                 #     conn.close()
