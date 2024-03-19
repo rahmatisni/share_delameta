@@ -107,13 +107,15 @@ def executeShare() :
                 dest_table_name = listDest[indexA]
                 try :     
                     cur = conn.cursor()
-                    query = "SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%'"
                     # Execute the query
-                    cur.execute(query)
+                    cur.execute(
+                        f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
+                    )
                     # Fetch the result
-                    result = cur.fetchone()
+                    result = cur.fetchall()
                     print("Result:", result[0])  # Assuming there's only one column in the result
                     cur.close()
+                    
                     origin_table_name = result[0]
 
                     cur.execute(
