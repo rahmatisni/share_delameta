@@ -107,19 +107,7 @@ def executeShare() :
                 dest_table_name = listDest[indexA]
                 try :     
                     cur = conn.cursor()
-                    query = """
-                        WITH first_query AS (
-                            SELECT viewname 
-                            FROM pg_views 
-                            WHERE schemaname = '{colsA}' AND viewname = 'vtblshift_bagihasil_exit'
-                        )
-                        SELECT 
-                            CASE 
-                                WHEN (SELECT COUNT(*) FROM first_query) = 0 
-                                THEN 'vtblshift_bagihasil_open'
-                                ELSE 'vtblshift_bagihasil_exit'
-                            END AS viewname;
-                    """
+                    query = "SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%'"
                     # Execute the query
                     cur.execute(query)
                     # Fetch the result
