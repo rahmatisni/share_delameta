@@ -103,10 +103,31 @@ def executeShare() :
                 # Perform database operations here
                 # For example:
                 cur = conn.cursor()
-                origin_table_name = os.getenv("origin_table_name")
+                # origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
-                try :
-                    # cur = conn.cursor()
+                try :     
+                    cur = conn.cursor()
+                    query = """
+                        WITH first_query AS (
+                            SELECT viewname 
+                            FROM pg_views 
+                            WHERE schemaname = '{colsA}' AND viewname = 'vtblshift_bagihasil_exit'
+                        )
+                        SELECT 
+                            CASE 
+                                WHEN (SELECT COUNT(*) FROM first_query) = 0 
+                                THEN 'vtblshift_bagihasil_open'
+                                ELSE 'vtblshift_bagihasil_exit'
+                            END AS viewname;
+                    """
+                    # Execute the query
+                    cur.execute(query)
+                    # Fetch the result
+                    result = cur.fetchone()
+                    print("Result:", result[0])  # Assuming there's only one column in the result
+                    cur.close()
+                    origin_table_name = result[0]
+
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
                     columns = cur.fetchall()
