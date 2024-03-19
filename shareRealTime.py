@@ -18,6 +18,7 @@ c = os.getenv("schema_origin")
 
 
 listDB = getDblistRT()
+print('list',listDB)
 listSource = listDB[0]
 listDest = listDB[1]
 idCabang = listDB[2]
