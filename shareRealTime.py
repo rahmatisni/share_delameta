@@ -161,11 +161,11 @@ def executeShare() :
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
-                except Exception as e :
-                    print(e)
-                # except :
-                #     print('Source Tidak Ditemukan')
-                #     pass
+                # except Exception as e :
+                #     print(e)
+                except :
+                    print('Source Tidak Ditemukan')
+                    pass
 
                 # finally:
                 #     conn.close()
