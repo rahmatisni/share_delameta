@@ -118,7 +118,7 @@ def executeShare() :
 
                     origin_table_name = resultz[0]
                     print("Result:", origin_table_name)  # Assuming there's only one column in the result
-                    
+
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
                     columns = cur.fetchall()
@@ -160,11 +160,11 @@ def executeShare() :
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
-                # except Exception as e :
-                #     print(e)
-                except :
-                    print('Source Tidak Ditemukan')
-                    pass
+                except Exception as e :
+                    print(e)
+                # except :
+                #     print('Source Tidak Ditemukan')
+                #     pass
 
                 # finally:
                 #     conn.close()
