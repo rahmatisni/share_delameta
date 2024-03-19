@@ -118,6 +118,7 @@ def executeShare() :
 
                     origin_table_name = resultz[0]
                     print("Result:", origin_table_name)  # Assuming there's only one column in the result
+                    cur = conn.cursor()
 
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
