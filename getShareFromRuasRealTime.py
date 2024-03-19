@@ -22,6 +22,8 @@ def getDblistRT() :
     shareRTOrigin = []
     shareRTDest = []
     shareIDCabang = []
+    shareIDGerbang = []
+
 
     for table in table_names:
         print(table)
@@ -36,6 +38,7 @@ def getDblistRT() :
         else :
             shareRTDest.append(table[5])
         shareIDCabang.append(table[1])
+        shareIDGerbang.append(table[0])
 
 
-    return (shareRTOrigin, shareRTDest, shareIDCabang)
+    return (shareRTOrigin, shareRTDest, shareIDCabang, shareIDGerbang)

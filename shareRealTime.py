@@ -21,6 +21,7 @@ listDB = getDblistRT()
 listSource = listDB[0]
 listDest = listDB[1]
 idCabang = listDB[2]
+IdGerbang = listDB[3]
 
 # 0 source
 # 1 dest
@@ -92,7 +93,8 @@ def pairData(data, dest_table_name):
 def executeShare() :
     for indexA, colsA in enumerate(listSource):
         print(colsA, '=>', listDest[indexA])
-        Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
+        # Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
+        Gerbangs = IdGerbang[indexA]
         Cabang = idCabang[indexA]
 
     # for connectionList in listSource :
