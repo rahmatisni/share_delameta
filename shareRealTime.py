@@ -94,12 +94,12 @@ def executeShare() :
         print(colsA, '=>', listDest[indexA])
         Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
         Cabang = idCabang[indexA]
-        print(Gerbangs, Cabang,'tes')
 
     # for connectionList in listSource :
         conn = connect_to_database()
 
         if conn is not None:
+                print('konek')
                 # Perform database operations here
                 # For example:
                 cur = conn.cursor()
