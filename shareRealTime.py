@@ -105,7 +105,7 @@ def executeShare() :
                 print('konek')
                 # Perform database operations here
                 # For example:
-                cur = conn.cursor()
+                # cur = conn.cursor()
                 # origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
                 try :     
