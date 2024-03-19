@@ -4,24 +4,12 @@ from conn_mysql import connect_to_database_mdb
 from getShareFromRuasRealTime import getDblistRT
 # from tqdm import tqdm
 import env
-import signal
 
 
 import json
 from dotenv import load_dotenv
 import os
 load_dotenv()
-
-class TimeoutException(Exception):
-    pass
-
-def timeout_handler(signum, frame):
-    raise TimeoutException("Query execution timed out")
-
-timeout_seconds = 10  # Adjust as needed
-signal.signal(signal.SIGALRM, timeout_handler)
-signal.alarm(timeout_seconds)
-
 
 # Call the function to establish the connection
 # conn = connect_to_database()
@@ -135,6 +123,7 @@ def executeShare() :
                     origin_table_name = resultz[0]
                     print("Result:", origin_table_name)  # Assuming there's only one column in the result
                     cur = conn.cursor()
+
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
                     columns = cur.fetchall()
@@ -176,16 +165,11 @@ def executeShare() :
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
-
-                # except Exception as e :
-                #     print(e)
-                    signal.alarm(0)
-                except TimeoutException as e:
-                    print(f"Timeout: {e}")
-                    pass
-                except :
-                    print('Source Tidak Ditemukan')
-                    pass
+                except Exception as e :
+                    print(e)
+                # except :
+                #     print('Source Tidak Ditemukan')
+                #     pass
 
                 # finally:
                 #     conn.close()
