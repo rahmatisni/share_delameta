@@ -112,11 +112,11 @@ def executeShare() :
                         f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
                     )
                     # Fetch the result
-                    result = cur.fetchall()
-                    print("Result:", result[0])  # Assuming there's only one column in the result
+                    resultz = cur.fetchone()
+                    print("Result:", resultz[0])  # Assuming there's only one column in the result
                     cur.close()
-                    
-                    origin_table_name = result[0]
+
+                    origin_table_name = resultz[0]
 
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
