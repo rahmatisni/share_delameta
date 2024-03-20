@@ -110,6 +110,8 @@ def executeShare() :
                 # cur = conn.cursor()
                 # origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
+                conn.set_session(autocommit=True, readonly=True, timeout=60000)  # Timeout in milliseconds
+
                 try :     
                     current_datetime_now = datetime.now()
 
