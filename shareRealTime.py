@@ -4,8 +4,6 @@ from conn_mysql import connect_to_database_mdb
 from getShareFromRuasRealTime import getDblistRT
 # from tqdm import tqdm
 import env
-
-
 import json
 from dotenv import load_dotenv
 import os
@@ -41,7 +39,6 @@ def getNullable(row, index1, index2):
         return 0
 
 def insertData(data, indexA):
-    # print(indexA)
     mdb_conn = connect_to_database_mdb(indexA)
 
     if mdb_conn.is_connected():
@@ -77,8 +74,7 @@ def pairData(data, dest_table_name):
 
     mdb_conn = connect_to_database_mdb(dest_table_name)
     if mdb_conn:
-        for indexA, dataToinsert in enumerate(dataqueryRes):
-                    
+        for indexA, dataToinsert in enumerate(dataqueryRes):      
         # for dataToinsert in dataqueryRes :
             try :
                 insertData(dataToinsert, dest_table_name)
@@ -95,7 +91,6 @@ def pairData(data, dest_table_name):
 def executeShare() :
     for indexA, colsA in enumerate(listSource):
         print(colsA, '=>', listDest[indexA])
-        # Gerbangs = listDest[indexA][listDest[indexA].index("lattol_") + len("lattol_"):]
         Gerbangs = IdGerbang[indexA]
         print('Gerbangs', Gerbangs)
         Cabang = idCabang[indexA]
@@ -105,15 +100,9 @@ def executeShare() :
 
         if conn is not None:
                 print('Connected')
-                # Perform database operations here
-                # For example:
-                # cur = conn.cursor()
-                # origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
-
                 try :     
                     current_datetime_now = datetime.now()
-
                     print('Time :',current_datetime_now,'[',colsA,']')
                     cur = conn.cursor()
                     cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
@@ -166,8 +155,6 @@ def executeShare() :
                     if len(result) > 0:
                         pairData(json.dumps(result), dest_table_name)
                     
-                    
-
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
