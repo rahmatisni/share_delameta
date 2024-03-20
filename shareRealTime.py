@@ -110,7 +110,9 @@ def executeShare() :
                 # origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
                 try :     
-                    print('colsA',colsA)
+                    current_datetime_now = datetime.now()
+
+                    print('Time :',current_datetime_now,colsA)
                     cur = conn.cursor()
                     # Execute the query
                     cur.execute(
