@@ -85,6 +85,7 @@ def pairData(data, dest_table_name):
                 if indexA % 60 == 0:
                     print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ((indexA+1) / len(dataqueryRes)) * 100, '%')
                 elif indexA+1 == len(dataqueryRes) :
+                    print(dataToinsert)
                     print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ('100%'))   
             except :
                 print('Error')
