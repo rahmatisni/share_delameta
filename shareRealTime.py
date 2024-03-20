@@ -83,10 +83,10 @@ def pairData(data, dest_table_name):
             try :
                 insertData(dataToinsert, dest_table_name)
                 if indexA % 60 == 0:
-                    print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ((indexA+1) / len(dataqueryRes)) * 100, '%')
+                    print('[',dest_table_name,indexA+1,']', '/', len(dataqueryRes), '=>', ((indexA+1) / len(dataqueryRes)) * 100, '%')
                 elif indexA+1 == len(dataqueryRes) :
                     print(dataToinsert[2],'|| Shift : ',dataToinsert[3])
-                    print(dest_table_name,indexA+1, '/', len(dataqueryRes), '=>', ('100%'))   
+                    print('[',dest_table_name,indexA+1,']', '/', len(dataqueryRes), '=>', ('100%'))   
             except :
                 print('Error')
 
@@ -104,7 +104,7 @@ def executeShare() :
         conn = connect_to_database()
 
         if conn is not None:
-                print('konek')
+                print('Connected')
                 # Perform database operations here
                 # For example:
                 # cur = conn.cursor()
@@ -113,7 +113,7 @@ def executeShare() :
                 try :     
                     current_datetime_now = datetime.now()
 
-                    print('Time :',current_datetime_now,colsA)
+                    print('Time :',current_datetime_now,'[',colsA,']')
                     cur = conn.cursor()
                     # Execute the query
                     cur.execute(
@@ -124,7 +124,7 @@ def executeShare() :
                     cur.close()
 
                     origin_table_name = resultz[0]
-                    print("Result:", origin_table_name)  # Assuming there's only one column in the result
+                    print("Source :", origin_table_name)  # Assuming there's only one column in the result
                     cur = conn.cursor()
 
                     cur.execute(
