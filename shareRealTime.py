@@ -119,12 +119,17 @@ def executeShare() :
                     print("Source :", origin_table_name)  # Assuming there's only one column in the result
                     cur = conn.cursor()
 
+                    cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
+
                     cur.execute(
                         f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
                     columns = cur.fetchall()
                     column_names = [col[0] for col in columns]
                     cur.close()
                     cur = conn.cursor()
+
+                    cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
+
                     cur.execute(
                         f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name}")
                     
