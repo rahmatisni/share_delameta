@@ -110,13 +110,14 @@ def executeShare() :
                 # cur = conn.cursor()
                 # origin_table_name = os.getenv("origin_table_name")
                 dest_table_name = listDest[indexA]
-                conn.set_session(autocommit=True, readonly=True, timeout=60000)  # Timeout in milliseconds
 
                 try :     
                     current_datetime_now = datetime.now()
 
                     print('Time :',current_datetime_now,'[',colsA,']')
                     cur = conn.cursor()
+                    cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
+
                     # Execute the query
                     cur.execute(
                         f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
