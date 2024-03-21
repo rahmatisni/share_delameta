@@ -163,6 +163,8 @@ def executeShare() :
                     # with open(dest_table_name+".json", "w") as outfile:
                     #     outfile.write(json.dumps(result))
                     result.clear()
+                    conn.close()
+
                 # except Exception as e :
                 #     print(e)
                 except :
@@ -176,4 +178,4 @@ def executeShare() :
         except :
             print("Connection not established. Exiting.")
             pass            
-        conn.close()
+        # conn.close()
