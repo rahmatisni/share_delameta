@@ -7,8 +7,6 @@ import env
 import json
 from dotenv import load_dotenv
 import os
-import time
-
 load_dotenv()
 
 # Call the function to establish the connection
@@ -96,89 +94,83 @@ def executeShare() :
         Gerbangs = IdGerbang[indexA]
         print('Gerbangs', Gerbangs)
         Cabang = idCabang[indexA]
-        start_time = time.time()
-        # if time.time() - start_time > 3:
-        #     break
+
     # for connectionList in listSource :
         conn = connect_to_database()
 
-        try :
-            if conn is not None:
-                    print('Connected')
-                    dest_table_name = listDest[indexA]
-                    try :     
-                        current_datetime_now = datetime.now()
-                        print('Time :',current_datetime_now,'[',colsA,']')
-                        cur = conn.cursor()
-                        cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
+        if conn is not None:
+                print('Connected')
+                dest_table_name = listDest[indexA]
+                try :     
+                    current_datetime_now = datetime.now()
+                    print('Time :',current_datetime_now,'[',colsA,']')
+                    cur = conn.cursor()
+                    cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
 
-                        # Execute the query
-                        cur.execute(
-                            f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
-                        )
-                        # Fetch the result
-                        resultz = cur.fetchone()
-                        cur.close()
+                    # Execute the query
+                    cur.execute(
+                        f"SELECT viewname FROM pg_views where viewname like '%vtblshift_bagihasil%' and schemaname = '{colsA}'"
+                    )
+                    # Fetch the result
+                    resultz = cur.fetchone()
+                    cur.close()
 
-                        origin_table_name = resultz[0]
-                        print("Source :", origin_table_name)  # Assuming there's only one column in the result
-                        cur = conn.cursor()
+                    origin_table_name = resultz[0]
+                    print("Source :", origin_table_name)  # Assuming there's only one column in the result
+                    cur = conn.cursor()
 
-                        cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
+                    cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
 
-                        cur.execute(
-                            f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
-                        columns = cur.fetchall()
-                        column_names = [col[0] for col in columns]
-                        cur.close()
-                        cur = conn.cursor()
+                    cur.execute(
+                        f"SELECT column_name FROM information_schema.columns WHERE table_schema = '{colsA}' AND table_name = '{origin_table_name}'")
+                    columns = cur.fetchall()
+                    column_names = [col[0] for col in columns]
+                    cur.close()
+                    cur = conn.cursor()
 
-                        cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
+                    cur.execute("SET statement_timeout = 60000")  # Timeout in milliseconds
 
-                        cur.execute(
-                            f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name}")
-                        
-                        rows = cur.fetchall()
+                    cur.execute(
+                        f"SELECT TO_CHAR(to_date(SUBSTRING( id, 2, 6 ) , 'DDMMYY'),'YYYY-MM-DD') AS Tanggal, substr(id, 1,1) AS Shift, * FROM {colsA}.{origin_table_name}")
                     
-                        for row in rows:
-                            data['IdCabang'] = Cabang
-                            data['Id'] = row[2]
-                            data['Shift'] = row[1]
-                            data['Tanggal'] = row[0]
-                            data['IdGerbang'] = Gerbangs
-                            data['Pendapatan'] = {}
-                            for index, cols in enumerate(column_names):
-                                if(cols != 'id' and cols != 'tanggal' and cols != 'shift'):
-                                    indexes = index+2
-                                    second_part = cols.split("_")[1]
-                                    inv = second_part.upper()
-                                    data['Pendapatan'][inv] = {
-                                        'Tunai': getNullable(row, indexes, 0),
-                                        'RpeMandiri': getNullable(row, indexes, 1),
-                                        'RpeBri': getNullable(row, indexes, 2),
-                                        'RpeBni': getNullable(row, indexes, 3),
-                                        'RpeBca': getNullable(row, indexes, 4),
-                                        'RpeFlo': getNullable(row, indexes, 5),
-                                        'RpeDKI': getNullable(row, indexes, 6)
-                                    }
-                            result.append(data.copy())
-                        if len(result) > 0:
-                            pairData(json.dumps(result), dest_table_name)
-                        
-                        # with open(dest_table_name+".json", "w") as outfile:
-                        #     outfile.write(json.dumps(result))
-                        result.clear()
-                    # except Exception as e :
-                    #     print(e)
-                    except :
-                        print('Source Tidak Ditemukan')
-                        pass
+                    rows = cur.fetchall()
+                
+                    for row in rows:
+                        data['IdCabang'] = Cabang
+                        data['Id'] = row[2]
+                        data['Shift'] = row[1]
+                        data['Tanggal'] = row[0]
+                        data['IdGerbang'] = Gerbangs
+                        data['Pendapatan'] = {}
+                        for index, cols in enumerate(column_names):
+                            if(cols != 'id' and cols != 'tanggal' and cols != 'shift'):
+                                indexes = index+2
+                                second_part = cols.split("_")[1]
+                                inv = second_part.upper()
+                                data['Pendapatan'][inv] = {
+                                    'Tunai': getNullable(row, indexes, 0),
+                                    'RpeMandiri': getNullable(row, indexes, 1),
+                                    'RpeBri': getNullable(row, indexes, 2),
+                                    'RpeBni': getNullable(row, indexes, 3),
+                                    'RpeBca': getNullable(row, indexes, 4),
+                                    'RpeFlo': getNullable(row, indexes, 5),
+                                    'RpeDKI': getNullable(row, indexes, 6)
+                                }
+                        result.append(data.copy())
+                    if len(result) > 0:
+                        pairData(json.dumps(result), dest_table_name)
+                    
+                    # with open(dest_table_name+".json", "w") as outfile:
+                    #     outfile.write(json.dumps(result))
+                    result.clear()
+                # except Exception as e :
+                #     print(e)
+                except :
+                    print('Source Tidak Ditemukan')
+                    pass
 
-                    # finally:
-                    #     conn.close()
-            else:
-                print("Connection not established. Exiting.")
-        except :
-            print('Source Tidak Ditemukan')
-            pass
+                # finally:
+                #     conn.close()
+        else:
+            print("Connection not established. Exiting.")
         conn.close()
