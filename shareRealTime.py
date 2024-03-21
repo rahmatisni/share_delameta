@@ -96,9 +96,9 @@ def executeShare() :
         Cabang = idCabang[indexA]
 
     # for connectionList in listSource :
-        conn = connect_to_database()
-
-        if conn is not None:
+        try :
+            conn = connect_to_database()
+            if conn is not None:
                 print('Connected')
                 dest_table_name = listDest[indexA]
                 try :     
@@ -171,6 +171,9 @@ def executeShare() :
 
                 # finally:
                 #     conn.close()
-        else:
+            else:
+                print("Connection not established. Exiting.")
+        except :
             print("Connection not established. Exiting.")
+            pass            
         conn.close()
