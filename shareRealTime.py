@@ -44,8 +44,8 @@ def insertData(data, indexA):
     if mdb_conn.is_connected():
         try:
             cursor = mdb_conn.cursor()
-            # print(data)
-            sql = "INSERT INTO "+os.getenv("table_destination_realtime_share")+"(IdCabang,IdGerbang, Tanggal, Shift, Golongan, KodeInvestor, NamaInvestor, Tunai, RpeMandiri, RpeBri, RpeBni, RpeBca, RpeNobu, RpeDKI, RpeMega, RpDinasKary, RpDinasMitra, RpTotal, KodeIntegrator, json, flag, TanggalKirim, ResponseMessage, ResponseStatus, RpFlo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            print(data)
+            sql = "INSERT INTO '{indexA}' (IdCabang,IdGerbang, Tanggal, Shift, Golongan, KodeInvestor, NamaInvestor, Tunai, RpeMandiri, RpeBri, RpeBni, RpeBca, RpeNobu, RpeDKI, RpeMega, RpDinasKary, RpDinasMitra, RpTotal, KodeIntegrator, json, flag, TanggalKirim, ResponseMessage, ResponseStatus, RpFlo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             # sql = "INSERT INTO "+env.table_destination_realtime_share+"(IdCabang,IdGerbang, Tanggal, Shift, Golongan, KodeInvestor, NamaInvestor, Tunai, RpeMandiri, RpeBri, RpeBni, RpeBca, RpeNobu, RpeDKI, RpeMega, RpDinasKary, RpDinasMitra, RpTotal, KodeIntegrator, json, flag, TanggalKirim, ResponseMessage, ResponseStatus, RpFlo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             sql += " ON DUPLICATE KEY UPDATE Tunai = %s, RpeMandiri = %s, RpeBri = %s, RpeBni = %s, RpeBca = %s, RpeNobu = %s, RpeDKI = %s, RpeMega = %s, RpDinasKary = %s, RpDinasMitra = %s, RpTotal = %s, KodeIntegrator = %s, json = %s, flag = %s, TanggalKirim = %s, ResponseMessage = %s, ResponseStatus = %s, RpFlo = %s"
             cursor.execute(sql, data)
